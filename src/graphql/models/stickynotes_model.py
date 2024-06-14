@@ -1,13 +1,14 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Integer, String, ForeignKey, DateTime
+from sqlalchemy.orm import Mapped, mapped_column
 from pydantic.typing import Optional
 from . import Base, User
 
 class StickyNotes(Base):
     __tablename__ = "stickynotes"
-    id: int = Column(Integer, primary_key=True, index=True)
-    text: str = Column(String, nullable=True)
-    created_datetime: DateTime = Column(DateTime, nullable=False)
-    user_id: Optional[int] = Column(Integer, ForeignKey(User.id, ondelete='CASCADE'), nullable=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    text: Mapped[str] = mapped_column(String, nullable=True)
+    created_datetime: Mapped[DateTime] = mapped_column(DateTime, nullable=False)
+    user_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey(User.id, ondelete='CASCADE'), nullable=True)
 
     def as_dict(self):
         return {

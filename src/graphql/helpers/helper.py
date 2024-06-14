@@ -9,7 +9,7 @@ def convert_camel_case(name):
 def get_only_selected_fields(db_baseclass_name,info):
     db_relations_fields = inspect(db_baseclass_name).relationships.keys()
     selected_fields = [convert_camel_case(field.name)  for field in info.selected_fields[0].selections if field.name not in db_relations_fields]
-    return selected_fields
+    return [getattr(db_baseclass_name, f) for f in selected_fields]
     
 def get_valid_data(model_data_object, model_class):
     data_dict = {}

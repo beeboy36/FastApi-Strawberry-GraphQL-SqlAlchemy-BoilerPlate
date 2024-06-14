@@ -37,7 +37,7 @@ async def get_user(user_id, info):
 async def add_user(name):
     """ Add user resolver """
     async with get_session() as s:
-        sql = select(user_model.User).options(load_only('name')) \
+        sql = select(user_model.User).options(load_only(user_model.User.name)) \
             .filter(user_model.User.name == name)
         existing_db_user = (await s.execute(sql)).first()
         if existing_db_user is not None:
@@ -46,7 +46,7 @@ async def add_user(name):
         query = insert(user_model.User).values(name=name)
         await s.execute(query)
         
-        sql = select(user_model.User).options(load_only('name')).filter(user_model.User.name == name)
+        sql = select(user_model.User).options(load_only(user_model.User.name)).filter(user_model.User.name == name)
         db_user = (await s.execute(sql)).scalars().unique().one()
         await s.commit()
 
